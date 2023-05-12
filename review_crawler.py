@@ -122,7 +122,7 @@ class review_crawler:
                 for i in range(2, 11):
                     print(k*10+i, '/', num_page)
                     next_page = self.driver.find_element(By.XPATH, self.next_page_xpath.format(i))
-                    time.sleep(timesleep)
+                    time.sleep(timesleep+1)
                     next_page.click()
                     time.sleep(timesleep)
                     
