@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <title>Musical_Recommendation</title>
+    <style>
+        body {
+            text-align: center;
+            background-color: black;
+            font-family: Arial, Helvetica, sans-serif;
+            overflow: hidden;
+        }
+        .curtain-left,
+        .curtain-right {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background-color: red;
+            transition: transform 2s ease;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .curtain-left:before,
+        .curtain-right:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: red;
+            opacity: 0.5;
+        }
+        .curtain-left .wrinkle,
+        .curtain-right .wrinkle {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.2) 0px, rgba(255, 255, 255, 0.2) 5px, transparent 5px, transparent 10px);
+            animation: wrinkle-animation 4s infinite;
+        }
+        .curtain-left {
+            left: 0;
+            transform-origin: top right;
+            transform: scaleX(1);
+            animation: open-curtain 2s ease-in-out;
+            animation-fill-mode: forwards;
+        }
+        .curtain-right {
+            right: 0;
+            transform-origin: top left;
+            transform: scaleX(1);
+            animation: open-curtain 2s ease-in-out;
+            animation-fill-mode: forwards;
+        }
+        @keyframes open-curtain {
+            0% {
+                transform: scaleX(1);
+                transform-origin: center;
+            }
+            100% {
+                transform: scaleX(0);
+                transform-origin: center;
+            }
+        }
+        h1{
+            color: #e50914;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 150px;
+            font-weight: bold;
+            margin-right: 5px;
+            text-decoration: none;
+            vertical-align: middle;
+            animation: fade-in 2s ease-in-out;
+            animation-fill-mode: forwards;
+            opacity: 0;
+            }
+        .name_question {
+            font-size: 40px;
+            color: white;
+            font-weight: bold;
+            animation: fade-in 4s ease-in-out;
+            animation-fill-mode: forwards;
+            opacity: 0;
+            margin-bottom: 10px;
+        }
+        #name_question_bottom {
+            margin-bottom: 30px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            color: black;
+            opacity: 0;
+            animation: fade-in 4s ease-in-out forwards;
+        }
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        @keyframes wrinkle-animation {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 50px 50px;
+            }
+        }
+    </style>
+    <script>
+        window.addEventListener('load', function() {
+            var curtains = document.querySelectorAll('.curtain-left, .curtain-right');
+            for (var i = 0; i < curtains.length; i++) {
+                curtains[i].classList.add('curtain-open');
+            }
+
+            var inputElement = document.querySelector('input[name="name"]');
+            inputElement.placeholder = '이름을 입력해주세요';
+            inputElement.classList.add('fade-in-placeholder');
+        });
+    </script>
+</head>
+<body>
+    <div class="curtain-left">
+        <div class="wrinkle"></div>
+    </div>
+    <div class="curtain-right">
+        <div class="wrinkle"></div>
+    </div>
+    <p>
+        <h1>Muflix</h1>
+    </p>
+    <p>
+        <div class="name_question">뮤지컬 세계에 오신 여러분들을 환영합니다</div>
+        <div id="name_question_bottom" class="name_question">당신의 이름을 알려주세요!</div>
+    </p>
+    <p>
+        <div>
+            <form action="{% url 'index_name' %}" method="POST">
+                {% csrf_token %}
+                <input type="text" name="name">
+            </form>
+        </div>
+    </p>
+</body>
+</html>
