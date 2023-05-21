@@ -1,0 +1,316 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Musical_Recommendation</title>
+    <style>
+        body{
+            text-align: center;
+            background-color: black;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+        }
+        p{
+            color : white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            
+        }
+        div>label{
+            color : white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+        h1{
+            color : red;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: 100px;
+            font-weight: bold;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        #top{
+            color : white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: 40px;
+            animation: fade-in 3s ease-in-out forwards;
+        }
+        #second_top{
+            color : white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: 40px;
+            display: none;
+            animation: fade-in 3s ease-in-out forwards;
+            margin-bottom: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        @keyframes fade-in {
+            0% {opacity: 0;}
+            100% {opacity: 1;}
+        }
+        @keyframes fade-out {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        div > form > p{
+            font-size: 25px
+        }
+        .custom-radio {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            padding-left: 25px;
+            margin-right: 10px;
+            font-size: 25px;
+            user-select: none;
+        }
+
+        .custom-radio::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            background-color: transparent;
+        }
+
+        .custom-radio input:checked + .custom-radio::before {
+            background-color: #3366ff;
+            border-color: #3366ff;
+        }
+
+        .custom-radio input[type="radio"] {
+            opacity: 0;
+            position: absolute;
+        }
+
+        .custom-radio:hover::before {
+            border-color: #999;
+        }
+        .custom-checkbox{
+            color : white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+        .custom-checkbox input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .custom-checkbox input[type="checkbox"] + label {
+            position: relative;
+            padding-left: 25px;
+            cursor: pointer;
+        }
+
+        .custom-checkbox input[type="checkbox"] + label:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 8;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked + label:before {
+            background-color: blue;
+            border-color: blue;
+        }
+
+        .custom-checkbox input[type="checkbox"] + label:after {
+            content: "";
+            position: absolute;
+            left: 5px;
+            top: 13px;
+            width: 8px;
+            height: 8px;
+            background-color: #fff;
+            border-radius: 50%;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked + label:after {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .submit_button {
+            background-color: blue;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit_button:hover {
+            background-color: darkblue;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $("input[name='gender']").change(function() {
+                if ($(this).is(":checked")) {
+                    $(".gender-question").addClass("hidden");
+                    $(".old-question").removeClass("hidden");
+                }
+            });
+
+            $("input[name='old']").change(function() {
+                if ($(this).is(":checked")) {
+                    $(".old-question").addClass("hidden");
+                    $(".custom-checkbox").removeClass("hidden");
+                }
+            });
+
+            $("input[name='keyword']").change(function() {
+                if ($(this).is(":checked")) {
+                    $("input[type='submit']").removeClass("hidden");
+                    $(".submit_button").removeClass("hidden");
+                }
+            });
+            $("#top").on("animationend", function() {
+                $(this).css("animation", "fade-out 1s ease-in-out forwards");
+                $(this).on("animationend", function() {
+                    $(this).css("display", "none");
+                    $("#second_top").css("display", "block");
+                    });
+                });
+            $("#second_top").on("animationend", function() {
+            $(".gender-question").removeClass("hidden");
+            });
+        });
+    </script>
+</head>
+<body>
+    <p><h1>Muflix</h1></p>
+    <p><div id = "top">환영합니다 {{user_name}}님!</div></p>
+    <p><div id="second_top"> 당신에 대한 소문은 익히 들었습니다 <br> 우리 조금 더 친해져볼까요?</div></p>
+    <p>
+        <div>
+            <form action = "{% url 'results' %}">
+                {% csrf_token %}
+                <p class="gender-question hidden">
+                    당신의 성별은!? <br>
+                    <label class="custom-radio">
+                        <input type="radio" name="gender" value="남성"> 남성
+                    </label>
+                    <label class="custom-radio">
+                        <input type="radio" name="gender" value="여성"> 여성
+                    </label>
+                </p>
+                <p class="old-question hidden">
+                    당신의 나이는!? <br>
+                    <label class="custom-radio">
+                        <input type="radio" name="old" value="10대"> 10대
+                    </label>
+                    <label class="custom-radio">
+                        <input type="radio" name="old" value="20대"> 20대
+                    </label>
+                    <label class="custom-radio">
+                        <input type="radio" name="old" value="30대"> 30대
+                    </label>
+                    <label class="custom-radio">
+                        <input type="radio" name="old" value="40대"> 40대
+                    </label>
+                    <label class="custom-radio">
+                        <input type="radio" name="old" value="50대"> 50대 이상
+                    </label>
+                    
+                </p>
+                <div class="custom-checkbox hidden">
+                    당신이 좋아하는 키워드를 모두 선택해주세요! <br>
+                    <input type="checkbox" id="checkbox1" name="keyword" value="코미디">
+                    <label for="checkbox1">코미디</label>
+                    <input type="checkbox" id="checkbox2" name="keyword" value="판타지">
+                    <label for="checkbox2">판타지</label>
+                    <input type="checkbox" id="checkbox3" name="keyword" value="미스터리">
+                    <label for="checkbox3">미스터리</label>
+                    <input type="checkbox" id="checkbox4" name="keyword" value="공포">
+                    <label for="checkbox4">공포</label>
+                    <input type="checkbox" id="checkbox5" name="keyword" value="액션">
+                    <label for="checkbox5">액션</label>
+                    <input type="checkbox" id="checkbox6" name="keyword" value="가족">
+                    <label for="checkbox6">가족</label>
+                    <input type="checkbox" id="checkbox7" name="keyword" value="모험">
+                    <label for="checkbox7">모험</label>
+                    <input type="checkbox" id="checkbox8" name="keyword" value="전쟁">
+                    <label for="checkbox8">전쟁</label>
+                    <input type="checkbox" id="checkbox9" name="keyword" value="시대극">
+                    <label for="checkbox9">시대극</label>
+                    <input type="checkbox" id="checkbox10" name="keyword" value="범죄">
+                    <label for="checkbox10">범죄</label>
+                    <br>
+                    <input type="checkbox" id="checkbox11" name="keyword" value="로맨스">
+                    <label for="checkbox11">로맨스</label>
+                    <input type="checkbox" id="checkbox12" name="keyword" value="종교">
+                    <label for="checkbox12">종교</label>
+                    <input type="checkbox" id="checkbox13" name="keyword" value="퀴어">
+                    <label for="checkbox13">퀴어</label>
+                    <input type="checkbox" id="checkbox14" name="keyword" value="스포츠">
+                    <label for="checkbox14">스포츠</label>
+                    <input type="checkbox" id="checkbox15" name="keyword" value="정치">
+                    <label for="checkbox15">정치</label>
+                    <input type="checkbox" id="checkbox16" name="keyword" value="법정">
+                    <label for="checkbox16">법정</label>
+                    <input type="checkbox" id="checkbox17" name="keyword" value="재난">
+                    <label for="checkbox17">재난</label>
+                    <input type="checkbox" id="checkbox18" name="keyword" value="성장">
+                    <label for="checkbox18">성장</label>
+                    <input type="checkbox" id="checkbox19" name="keyword" value="소설 원작">
+                    <label for="checkbox19">소설 원작</label>
+                    <input type="checkbox" id="checkbox20" name="keyword" value="영화 원작">
+                    <label for="checkbox20">영화 원작</label>
+                    <br>
+                    <input type="checkbox" id="checkbox21" name="keyword" value="실화 기반">
+                    <label for="checkbox21">실화 기반</label>
+                    <input type="checkbox" id="checkbox22" name="keyword" value="우정">
+                    <label for="checkbox22">우정</label>
+                    <input type="checkbox" id="checkbox23" name="keyword" value="청춘">
+                    <label for="checkbox23">청춘</label>
+                    <input type="checkbox" id="checkbox24" name="keyword" value="복수">
+                    <label for="checkbox24">복수</label>
+                    <input type="checkbox" id="checkbox25" name="keyword" value="키즈">
+                    <label for="checkbox25">키즈</label>
+                    <input type="checkbox" id="checkbox26" name="keyword" value="폭력">
+                    <label for="checkbox26">폭력</label>
+                    <input type="checkbox" id="checkbox27" name="keyword" value="선정">
+                    <label for="checkbox27">선정</label>
+                    <input type="checkbox" id="checkbox28" name="keyword" value="드라마">
+                    <label for="checkbox28">드라마</label>
+                    <input type="checkbox" id="checkbox29" name="keyword" value="스릴러">
+                    <label for="checkbox29">스릴러</label>
+                </div>
+                <p class="keyword-question hidden">
+                </p>
+                <p>
+                    <input class="submit_button hidden" type="submit" value="제출">
+                </p>
+            </form>
+        </div>
+    </p>
+</body>
+</html>
