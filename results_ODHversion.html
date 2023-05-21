@@ -1,0 +1,153 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <title>Musical_Recommendation</title>
+    <style>
+        body {
+            text-align: center;
+            background-color: black;
+            font-family: Arial, Helvetica, sans-serif;
+            overflow: hidden;
+        }
+        .loader-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .loader {
+            border: 16px solid #f3f3f3; 
+            border-top: 16px solid #e50914; 
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite; 
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+
+        .loading-text {
+            color: white;
+            font-weight: bold;
+            font-size: 30px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes fade-in {
+            0% {opacity: 0;}
+            100% {opacity: 1;}
+        }
+
+        @keyframes fade-out {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .musical_information{
+            text-align: center;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: 25px;
+            opacity: 0;
+        }
+        .poster{
+            width: 225;
+            height: 300;
+        }
+        .musical_items_container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .musical_item{
+            margin: 70px;
+            margin-top: 20px;
+            opacity: 0;
+        }
+        h1{
+            color : red;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: 100px;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="loader-container">
+        <div class="loader"></div> 
+        <div class="loading-text">당신을 위한 뮤지컬을 꺼내는 중입니다...</div> 
+    </div>
+    <script>
+        window.addEventListener('load', function() {
+            var loaderContainer = document.querySelector('.loader-container');
+            setTimeout(function() {
+                loaderContainer.style.animation = 'fade-out 1s ease-in-out forwards';
+            }, 3000);
+            var divToShow = document.querySelector('.musical_information');
+            loaderContainer.addEventListener('animationend', function() {
+                // div 보이기
+                divToShow.style.opacity = '1';
+                setTimeout(function() {
+                    var firstMusical = document.querySelector('#first_musical');
+                    firstMusical.style.animation = 'fade-in 2s ease-in-out forwards';
+                }, 1500);
+                setTimeout(function() {
+                    var thirdMusical = document.querySelector('#third_musical');
+                    thirdMusical.style.animation = 'fade-in 2s ease-in-out forwards';
+                }, 3000);
+                setTimeout(function() {
+                    var secondMusical = document.querySelector('#second_musical');
+                    secondMusical.style.animation = 'fade-in 2s ease-in-out forwards';
+                }, 4500);
+                setTimeout(function() {
+                    divToShow.style.animation = 'blink 0.5s linear forwards';
+                }, 6500);
+            });
+
+        });
+        
+    </script>
+    <div class="musical_information">
+        <h1>
+            Muflix
+        </h1>
+        <p>
+           당신을 위한 취향저격 뮤지컬들입니다!
+        </p>
+        <div class="musical_items_container">
+            <div class="musical_item" id="first_musical">
+                <img src="{{img_url_3}}" class="poster">
+                <br>
+                <p>3위 : {{title_3}}</p>
+            </div>
+            <div class="musical_item" id="second_musical">
+                <img src="{{img_url_1}}" class="poster">
+                <br>
+                <p>1위 : {{title_1}}</p>
+            </div>
+            <div class="musical_item" id="third_musical">
+                <img src="{{img_url_2}}" class="poster">
+                <br>
+                <p>2위 : {{title_2}}</p>
+            </div>
+        </div>  
+    </div>
+</body>
+</html>
